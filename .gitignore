@@ -1,3 +1,14 @@
+__pycache__/
+*.py[cod]
+.env
+.venv
+venv/
+*.log
+models/*.pth
+models/*.pt
+app/__pycache__/
+uploads/
+outputs/
 **/.env
 **/.ipynb_checkpoints/
 **/__pycache__/

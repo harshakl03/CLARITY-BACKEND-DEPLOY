@@ -1,15 +1,19 @@
 import os
+import torch
 from dotenv import load_dotenv
 
 load_dotenv()
 
 class Settings:
-    DENSENET121_PATH = os.getenv("DENSENET121_PATH", "./models/densenet121.pth")
-    RESNET152_PATH = os.getenv("RESNET152_PATH", "./models/resnet152.pth")
+    # Model paths (Docker container paths)
+    DENSENET121_PATH: str = "/app/models/densenet121.pth"
+    RESNET152_PATH: str = "/app/models/resnet152.pth"
     
     IMAGE_SIZE = 224
-    DEVICE = os.getenv("DEVICE", "cuda")
-    GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+    DEVICE: str = "cuda" if torch.cuda.is_available() else "cpu"
+    
+    # Gemini API (read from environment on Render)
+    GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
     GEMINI_MODEL = os.getenv("GEMINI_MODEL", "models/gemini-2.5-pro")
     
     LABEL_COLS = [
@@ -19,8 +23,8 @@ class Settings:
     ]
     
     CONFIDENCE_THRESHOLD = 0.5
-    UPLOAD_DIR = "./uploads"
-    OUTPUT_DIR = "./outputs"
+    UPLOAD_DIR = "/app/uploads"      # Docker absolute path
+    OUTPUT_DIR = "/app/outputs"      # Docker absolute path
     MAX_FILE_SIZE = 50 * 1024 * 1024
     
     DENSENET121_LAYERS = [
@@ -62,6 +66,7 @@ class Settings:
         "integrated_gradients",
         "saliency",
     ]
+    
     HEATMAP_METHODS_RESNET = [
         "gradcam_pp",
         "layercam",
@@ -72,5 +77,6 @@ class Settings:
 
 settings = Settings()
 
+# Create directories in Docker container
 os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
 os.makedirs(settings.OUTPUT_DIR, exist_ok=True)
