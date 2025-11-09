@@ -16,11 +16,14 @@ download_from_gdrive() {
     python3 << EOF
 import gdown
 import os
+
 file_id = "$FILE_ID"
-output_path = "/app/models/$FILENAME"
+filename = "$FILENAME"
+output_path = f"/app/models/{filename}"
 url = f"https://drive.google.com/uc?id={file_id}&confirm=t"
+
 gdown.download(url, output_path, quiet=False)
-print(f"✅ {FILENAME} downloaded successfully")
+print(f"✅ {filename} downloaded successfully")
 EOF
 }
 
